@@ -44,10 +44,17 @@ jobs:
       - name: Run tests
         run: npm run lint
 
-  say-hello:
+  push-to-s3:
     runs-on: ubuntu-latest
     needs: test
 
     steps:
-      - name: Say Hello World
-        run: echo "Hello, World!"
+      - name: Config the AWS credential
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ap-southeast-2
+
+      - name: Deploy to S3
+        run: aws s3 sync build/ s3://deploying-vite-react-static-web --delete
