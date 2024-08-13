@@ -46,6 +46,7 @@ jobs:
 
   push-to-s3:
     runs-on: ubuntu-latest
+    environment: main
     needs: test
 
     steps:
